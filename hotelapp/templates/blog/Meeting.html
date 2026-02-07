@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Banner Section -->
+<div style="
+    background: url('{% static 'img/meeting-banner.jpg' %}') center/cover no-repeat;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+">
+    <h1 style="
+        padding: 15px 35px;
+        border-radius: 8px;
+        font-weight: 600;
+    ">
+        Meeting & Conference Rooms
+    </h1>
+</div>
+
+<!-- Blog Content -->
+<div style="padding: 60px 0; background:#f9f9f9;">
+    <div class="container">
+
+        <!-- Card 1 -->
+        <div style="
+            display: flex;
+            gap: 30px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        ">
+            <img src="{% static 'img/blog/meeting-room.jpg' %}"
+                 style="width:320px; height:220px; object-fit:cover; border-radius:10px;">
+
+            <div>
+                <h3>Professional Meeting Rooms</h3>
+                <p style="color:#777;">
+                    Our meeting rooms are designed for productivity, offering a
+                    quiet, comfortable, and professional environment for your
+                    business needs.
+                </p>
+
+                <ul style="padding-left:18px; color:#555;">
+                    <li>Ideal for board meetings & presentations</li>
+                    <li>Comfortable seating arrangement</li>
+                    <li>Soundproof & air-conditioned</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div style="
+            display: flex;
+            gap: 30px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        ">
+            <img src="{% static 'img/blog/meeting2.jpg' %}"
+                 style="width:320px; height:220px; object-fit:cover; border-radius:10px;">
+
+            <div>
+                <h3>Modern Conference Facilities</h3>
+                <p style="color:#777;">
+                    Equipped with modern technology to ensure smooth and
+                    professional conferences, seminars, and workshops.
+                </p>
+
+                <ul style="padding-left:18px; color:#555;">
+                    <li>Projector & large display screens</li>
+                    <li>High-speed Wi-Fi connectivity</li>
+                    <li>Whiteboard & presentation tools</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

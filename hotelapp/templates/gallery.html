@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+<title>{% block title%} GALLERY {% endblock%}</title>
+{% block content %}
+    <!-- Breadcrumb Section Begin -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <h2>GALLERY</h2>
+                        <div class="bt-option">
+                            <a href="{% url 'index' %}">Home</a>
+                            <span>Gallery Grid</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Blog Section Begin -->
+    <section class="blog-section blog-page spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/Profile.jfif'%}">
+                        <div class="bi-text">
+                            <span class="b-tag">PROFILE</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/Outerview.jpg'%}">
+                        <div class="bi-text">
+                            <span class="b-tag">OUTERVIEW</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/reception.jpg'%}">
+                        <div class="bi-text">
+                            <span class="b-tag">RECEPTION</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/Waiting-loby.jpg'%}">
+                        <div class="bi-text">
+                            <span class="b-tag">WAITING-LOBY</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/Banquet.jpg'%}">
+                        <div class="bi-text">
+                            <span class="b-tag">BANQUET</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/Meeting-room.jpg'%}">
+                        <div class="bi-text">
+                            <span class="b-tag">MEETING-AREA</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/gym.jpg'%}">
+                        <div class="bi-text">
+                            <span class="b-tag">GYM</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/room-loby.jfif'%}">
+                        <div class="bi-text">
+                            <span class="b-tag">ROOMS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/Laundry.jfif' %}">
+                        <div class="bi-text">
+                            <span class="b-tag">LAUNDRY-AREA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+{% endblock %}
+</body>
+
+</html>

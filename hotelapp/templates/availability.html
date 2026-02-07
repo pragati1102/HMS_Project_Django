@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div style="
+    min-height: 70vh;
+    padding: 40px 0 80px 0;
+    background: #f9f9f9;
+">
+    <div class="container">
+
+        <h2 style="margin-bottom: 30px;">Available Rooms</h2>
+
+        {% if rooms %}
+            {% for room in rooms %}
+
+                <!-- ROOM CARD START -->
+                <div style="
+                    display: flex;
+                    gap: 20px;
+                    margin-bottom: 30px;
+                    padding: 15px;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    background: #fff;
+                    align-items: center;
+                ">
+
+                    <!-- Room Image -->
+                    <img src="{{ room.room_image.url }}" alt="Room Image"
+                         style="
+                            width: 320px;
+                            height: 200px;
+                            object-fit: cover;
+                            border-radius: 10px;
+                         ">
+
+                    <!-- Room Info -->
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0 0 10px 0;">
+                            {{ room.room_type }}
+                        </h3>
+
+                        <p style="margin: 5px 0; color: #555;">
+                            ₹{{ room.room_price }} / night
+                        </p>
+
+                        <p style="margin: 5px 0; color: #777;">
+                            Capacity: {{ room.room_capacity }}
+                        </p>
+
+                        <a href="{% url 'room_details' room.id %}"
+                           style="
+                                display: inline-block;
+                                margin-top: 12px;
+                                padding: 8px 18px;
+                                background-color: #007bff;
+                                color: #fff;
+                                text-decoration: none;
+                                border-radius: 5px;
+                                font-size: 14px;
+                           ">
+                            View Details
+                        </a>
+                    </div>
+
+                </div>
+                <!-- ROOM CARD END -->
+
+            {% endfor %}
+        {% else %}
+            <p>No rooms available for selected dates.</p>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
