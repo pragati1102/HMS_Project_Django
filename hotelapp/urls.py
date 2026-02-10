@@ -16,5 +16,10 @@ urlpatterns = [
     path('logout/',views.logout,name='logout'),
     path('room_avaliable/',views.room_available,name='room_avaliable'),
     path('banquet',views.banquet,name='banquet'),
-    path('meeting',views.meeting,name='meeting')
+    path('meeting',views.meeting,name='meeting'),
+    path('initiate-booking/<int:id>/', views.initiate_booking, name='initiate_booking'),
+
+    # path('book_room/<int:id>/', views.book_room, name='book_room'),
+    path('booking-sucess/',views.booking_sucess,name='booking_success')
+
 ]

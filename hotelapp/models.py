@@ -24,13 +24,33 @@ class Room(models.Model):
     def __str__(self):
         return self.room_num
     
-class Booking(models.Model):
-    user = models.ForeignKey(Register,on_delete=models.CASCADE)
-    room = models.ForeignKey(Room,on_delete=models.CASCADE)
+class Booking_room(models.Model):
+    PAYMENT_CHOICES = [
+        ('UPI','UPI'),
+        ('CASH','cash'),
+        ('Card','Credit card')
+    ]
+
+    user = models.ForeignKey(Register, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+
     check_in = models.DateField()
-    check_out=models.DateField()
+    check_out = models.DateField()
+    nights = models.IntegerField()
+    total_amount = models.DecimalField(max_digits=10,decimal_places=2)
+
+    payment_method = models.CharField(max_length=10,choices=PAYMENT_CHOICES)
+    payment_id = models.CharField(max_length=100,blank=True,null=True)
+    payment_status = models.CharField(max_length=20,default="PENDING")
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.room.room_num} ({self.check_in} - {self.check_out})"
-    
+        return f"{self.user.username} - {self.room.room_type}"
+
+
+
+
+
+
 

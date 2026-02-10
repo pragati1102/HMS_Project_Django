@@ -1,14 +1,30 @@
 from django.shortcuts import render,redirect,get_list_or_404,get_object_or_404
-from .models import Register,Room,Booking
+from .models import Register,Room,Booking_room
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from datetime import datetime
+from django.core.mail import send_mail
+
+
+
 
 # Create your views here.
 def index(request):
-    rooms = Room.objects.filter(room_available=True).order_by('-room_rating')[:4]
-    return render(request,"index.html",{'rooms':rooms})
+    unique_rooms = []
+    seen_types = set()
+
+    rooms = Room.objects.filter(room_available=True).order_by('-room_rating')
+
+    for room in rooms:
+        if room.room_type not in seen_types:
+            unique_rooms.append(room)
+            seen_types.add(room.room_type)
+
+    return render(request, "index.html", {
+        'rooms': unique_rooms[:4]   # show top 4 unique rooms
+    })
 
 def room(request):
     room_list = Room.objects.filter(room_available=True).order_by('room_price')
@@ -26,7 +42,7 @@ def room_details(request,id):
     return render(request,'room-details.html', {'room':room ,'previous_page': previous_page})
 
 def blog(request):
-    return render(request,'blog.html')
+    return render(request,'blog/banquet.html')
 
 def gallery(request):
     return render(request,'gallery.html')
@@ -113,7 +129,7 @@ def check_availability(request):
         )
 
         for room in all_rooms:
-            booked = Booking.objects.filter(
+            booked = Booking_room.objects.filter(
                 room=room,
                 check_in__lt=check_out,
                 check_out__gt=check_in
@@ -126,24 +142,39 @@ def check_availability(request):
 
     return render(request, 'availability.html', {'rooms': available_rooms})
 
-def book_room(request, room_id):
-    if not request.session.get('user_id'):
-        return redirect('login')
-
-    user = Register.objects.get(id=request.session['user_id'])
-    room = get_object_or_404(Room, id=room_id)
-
-    Booking.objects.create(
-        user=user,
-        room=room,
-        check_in=request.POST.get('check_in'),
-        check_out=request.POST.get('check_out')
-    )
-
-    return redirect('profile')
-
 def banquet(request):
     return render(request,'blog/banquet.html')
 
 def meeting(request):
     return render(request,'blog/meeting.html')
+
+def booking_sucess(request):
+    return render("Success.html")
+
+def initiate_booking(request,id):
+    if not request.session.get('user_id'):
+        return redirect('login')
+    
+    user =Register.objects.get(id=request.session['user_id'])
+    room =get_object_or_404(Room,id=id)
+
+    check_in = datetime.strptime(request.POST['check_in'],"%Y-%m-%d").date()
+    check_out = datetime.strptime(request.POST['check_out'],"%Y-%m-%d").date()
+    payment_method = request.POST['payment_method']
+
+    nights = (check_out - check_in).days
+    total_amount = nights * room.room_price
+
+
+    booking = Booking_room.objects.create(
+        user=user,
+        room=room,
+        check_in=check_in,
+        check_out=check_out,
+        nights=nights,
+        total_amount=total_amount,
+        payment_method=payment_method,
+        # payment_id=order['id']
+    )
+
+    return render(request,"room_details.html")
