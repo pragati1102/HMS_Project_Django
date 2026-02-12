@@ -48,7 +48,7 @@
                             Capacity: {{ room.room_capacity }}
                         </p>
 
-                        <a href="{% url 'room_details' room.id %}"
+                        <a href="{% url 'room_details' room.id %}?check_in={{ check_in }}&check_out={{ check_out }}"
                            style="
                                 display: inline-block;
                                 margin-top: 12px;

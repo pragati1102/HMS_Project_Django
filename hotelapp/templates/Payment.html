@@ -1,0 +1,66 @@
+<!-- Trigger Modal Automatically -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+    paymentModal.show();
+});
+</script>
+
+
+<!-- PAYMENT MODAL -->
+<div class="modal fade" id="paymentModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Your Booking</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <p><strong>Room:</strong> {{ booking.room.room_type }}</p>
+        <p><strong>Check-in:</strong> {{ booking.check_in }}</p>
+        <p><strong>Check-out:</strong> {{ booking.check_out }}</p>
+        <p><strong>Nights:</strong> {{ booking.nights }}</p>
+        <hr>
+        <h5>Total Amount: ₹ {{ booking.total_amount }}</h5>
+
+      </div>
+
+      <div class="modal-footer">
+        <button id="pay-btn" class="btn btn-success w-100">
+            Proceed to Pay
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var options = {
+    "key": "{{ razorpay_key }}",
+    "amount": "{{ amount }}",
+    "currency": "INR",
+    "name": "Hotel Booking",
+    "description": "Room Booking Payment",
+    "order_id": "{{ payment.id }}",
+    "handler": function (response){
+        window.location.href = "/payment-success/?payment_id=" 
+            + response.razorpay_payment_id 
+            + "&booking_id={{ booking.id }}";
+    },
+    "theme": {
+        "color": "#198754"
+    }
+};
+
+var rzp1 = new Razorpay(options);
+
+document.getElementById('pay-btn').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>

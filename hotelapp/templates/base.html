@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/modern.css' %}" type="text/css">
 </head>
 
 <body>
@@ -41,7 +42,7 @@
                     <div class="col-lg-2">
                         <div class="logo">
                             <a href="{% url 'index' %}">
-                                <img src="{% static 'img/logo-1.png' %}" alt="">
+                                <img src="{% static 'img/Logo.png' %}" alt="">
                             </a>
                         </div>
                     </div>
@@ -60,11 +61,16 @@
                                     <li><a href="{% url 'about' %}">About Us</a></li>
                                     <li><a href="{% url 'gallery' %}">Gallery</a></li>
                                     <li><a href="{% url 'contact' %}">Contact</a></li>
-                                    <li><a href="#" class="user-name" >{{nav_user.username}}</a>
+                                    {% if nav_user %}
+                                    <li><a href="#" class="user-name">{{ nav_user.username }}</a>
                                         <ul class="dropdown">
+                                            <li><a href="{% url 'profile' %}">Dashboard</a></li>
                                             <li><a href="{% url 'logout' %}">Logout</a></li>
                                         </ul>
                                     </li>
+                                    {% else %}
+                                    <li><a href="{% url 'login' %}">Login</a></li>
+                                    {% endif %}
                                 </ul>
                             </nav>
                             <div class="nav-right search-switch">

@@ -1,0 +1,111 @@
+/* modern.css - UI Enhancements */
+
+:root {
+    --primary-color: #dfa974;
+    --text-color: #19191a;
+    --glass-bg: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* Glassmorphism for Forms */
+.booking-form, .login-form-container {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-soft);
+    border-radius: 12px;
+}
+
+/* Smooth Card Hover Effects */
+.hp-room-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.hp-room-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* Button Gradients */
+.primary-btn {
+    background: linear-gradient(45deg, #dfa974, #eebf8c);
+    border: none;
+    transition: filter 0.3s ease;
+}
+
+.primary-btn:hover {
+    filter: brightness(1.1);
+}
+
+/* Animations */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-text h1, .hero-text p, .hero-text .primary-btn {
+    animation: fadeInSlideUp 0.8s ease-out forwards;
+}
+
+.hero-text p { animation-delay: 0.2s; opacity: 0; }
+.hero-text .primary-btn { animation-delay: 0.4s; opacity: 0; }
+
+/* Dashboard Styles */
+.dashboard-container {
+    padding: 50px 0;
+    background-color: #f9f9f9;
+}
+
+.dashboard-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.booking-table th {
+    text-align: left;
+    padding: 15px;
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: 600;
+}
+
+.booking-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.status-badge.pending { background-color: #fff3cd; color: #856404; }
+.status-badge.confirmed, .status-badge.success { background-color: #d4edda; color: #155724; }
+.status-badge.cancelled { background-color: #f8d7da; color: #721c24; }
+
+/* Room Details Polish */
+.room-details-item .rd-text h3 {
+    font-size: 36px;
+    color: #dfa974; /* Use primary color */
+}

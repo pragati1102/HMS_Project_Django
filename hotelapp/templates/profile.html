@@ -1,16 +1,100 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Profile</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
 
-<h2>Customer Profile</h2>
+{% block title %}My Profile | Sona Hotel{% endblock %}
 
-<p><strong>Username:</strong> {{ customer.username }}</p>
-<p><strong>Email:</strong> {{ customer.email }}</p>
+{% block content %}
 
-<a href="{% url 'index' %}">Back to Home</a>
+<!-- Breadcrumb Section Begin -->
+<div class="breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <h2>My Dashboard</h2>
+                    <div class="bt-option">
+                        <a href="{% url 'index' %}">Home</a>
+                        <span>Profile</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Section End -->
 
-</body>
-</html>
+<section class="dashboard-container">
+    <div class="container">
+        <div class="row">
+            <!-- User Details Card -->
+            <div class="col-lg-4">
+                <div class="dashboard-card text-center">
+                    <div class="user-avatar mb-3">
+                        <img src="{% static 'img/about/about-1.jpg' %}" alt="User"
+                            style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #dfa974;">
+                    </div>
+                    <h3>{{ customer.username }}</h3>
+                    <p class="text-muted">{{ customer.email }}</p>
+                    <hr>
+                    <div class="text-left">
+                        <p><strong>Member Since:</strong> Recently</p>
+                        <p><strong>Account Status:</strong> Active</p>
+                    </div>
+                    <a href="{% url 'logout' %}" class="primary-btn"
+                        style="margin-top: 20px; display: inline-block;">Logout</a>
+                </div>
+            </div>
+
+            <!-- Bookings List -->
+            <div class="col-lg-8">
+                <div class="dashboard-card">
+                    <h3>My Bookings</h3>
+                    {% if bookings %}
+                    <div class="table-responsive">
+                        <table class="booking-table">
+                            <thead>
+                                <tr>
+                                    <th>Room</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in bookings %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ booking.room.room_type }}</strong><br>
+                                        <small>Room #{{ booking.room.room_num }}</small>
+                                    </td>
+                                    <td>{{ booking.check_in }}</td>
+                                    <td>{{ booking.check_out }}</td>
+                                    <td>
+                                        {% if booking.payment_status == 'SUCCESS' %}
+                                        <span class="status-badge success">Confirmed</span>
+                                        {% elif booking.payment_status == 'PENDING' %}
+                                        <span class="status-badge pending">Pending</span>
+                                        {% else %}
+                                        <span class="status-badge cancelled">{{ booking.payment_status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>₹{{ booking.total_amount }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center p-5">
+                        <p>You haven't made any bookings yet.</p>
+                        <a href="{% url 'index' %}" class="primary-btn">Book Now</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

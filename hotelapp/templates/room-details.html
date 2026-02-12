@@ -86,7 +86,11 @@
 
                 <div class="modal-body">
 
-                    <p><strong>User:</strong> {{ request.user.username }}</p>
+                   {% if user %}
+                        <p><strong>User:</strong> {{ user.username }}</p>
+                    {% else %}
+                        <p class="text-danger">Please login to book this room</p>
+                    {% endif %}
 
                     <div class="row">
                         <div class="col-md-6">
@@ -103,16 +107,24 @@
 
                     <hr>
 
-                    <p>Total Nights: <strong><span id="nights">0</span></strong></p>
-                    <p>Total Amount: ₹<strong><span id="total">0</span></strong></p>
+                    <p>Total Nights:
+                        <strong>
+                            <span id="nights">
+                                {% if nights %} {{ nights }} {% else %} 0 {% endif %}
+                            </span>
+                        </strong>
+                    </p>
+
+                    <p>Total Amount: ₹
+                        <strong>
+                            <span id="total">
+                                {% if total_amount %} {{ total_amount }} {% else %} 0 {% endif %}
+                            </span>
+                        </strong>
+                    </p>
+
 
                     <label>Payment Method</label>
-                    <select name="payment_method" class="form-control" required>
-                        <option value="">-- Select --</option>
-                        <option value="UPI">UPI</option>
-                        <option value="CARD">Credit-Card</option>
-                        <option value="CASH">Cash</option>
-                    </select>
 
                 </div>
 
@@ -129,5 +141,13 @@
 </div>
 {% endblock %}
 </body>
+{% if show_modal %}
+<script>
+    var bookingModal = new bootstrap.Modal(
+        document.getElementById('bookingModal{{ room.id }}')
+    );
+    bookingModal.show();
+</script>
+{% endif %}
 
 </html>
