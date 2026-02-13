@@ -87,25 +87,13 @@
                 <div class="modal-body">
 
                    {% if user %}
-                        <p><strong>User:</strong> {{ user.username }}</p>
+                        <p><strong>User:</strong> {{ nav_user.username }}</p>
                     {% else %}
                         <p class="text-danger">Please login to book this room</p>
                     {% endif %}
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Check-In</label>
-                            <input type="date" id="check_in" name="check_in"
-                                   class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Check-Out</label>
-                            <input type="date" id="check_out" name="check_out"
-                                   class="form-control" required>
-                        </div>
-                    </div>
-
                     <hr>
+                        <input type="hidden" name="check_in" value="{{ check_in }}">
+                        <input type="hidden" name="check_out" value="{{ check_out }}">
 
                     <p>Total Nights:
                         <strong>
@@ -123,9 +111,12 @@
                         </strong>
                     </p>
 
+                    <label>PAYMENT METHOD</label>
+                    <br>
+                    <input type="radio" name="payment_method" value="RAZORPAY" required> Pay Online (Razorpay)
+                    <br>
 
-                    <label>Payment Method</label>
-
+                    <input type="radio" name="payment_method" value="CASH"> Pay at Hotel (Cash)
                 </div>
 
                 <div class="modal-footer">

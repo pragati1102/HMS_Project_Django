@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-
+{% extends 'base.html'%}
+{% load  static %}
+{% block content%}
 <!-- PAYMENT MODAL -->
 <div class="modal fade" id="paymentModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
@@ -64,3 +66,4 @@ document.getElementById('pay-btn').onclick = function(e){
     e.preventDefault();
 }
 </script>
+{% endblock %}

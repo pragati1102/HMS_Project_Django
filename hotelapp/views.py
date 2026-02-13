@@ -35,20 +35,34 @@ def room(request):
 def about(request):
     return render(request,'about-us.html')
 
-def room_details(request,id):
-    room = get_object_or_404(Room,id=id)
+def room_details(request, id):
+    room = get_object_or_404(Room, id=id)
+
     check_in = request.GET.get('check_in')
     check_out = request.GET.get('check_out')
 
-    previous_page = request.META.get('HTTP_REFERER')
-    user = None
-    if request.session.get("user_id"):
-        user = Register.objects.get(id=request.session['user_id'])
+    nights = 0
+    total_amount = 0
 
-    return render(request,'room-details.html', {'room':room ,'previous_page': previous_page,'user':user,'check_in': check_in,
-        'check_out': check_out
-        })
+    if check_in and check_out:
+        try:
+            check_in_date = datetime.strptime(check_in, "%Y-%m-%d").date()
+            check_out_date = datetime.strptime(check_out, "%Y-%m-%d").date()
 
+            if check_out_date > check_in_date:
+                nights = (check_out_date - check_in_date).days
+                total_amount = nights * room.room_price
+
+        except:
+            pass
+
+    return render(request, 'room-details.html', {
+        'room': room,
+        'check_in': check_in,
+        'check_out': check_out,
+        'nights': nights,
+        'total_amount': total_amount
+    })
 def blog(request):
     return render(request,'blog/banquet.html')
 
@@ -162,79 +176,120 @@ def meeting(request):
     return render(request,'blog/meeting.html')
 
 def booking_sucess(request):
-    return render("Success.html")
+    return render("success.html")
 
-def initiate_booking(request,id):
+def initiate_booking(request, id):
     if not request.session.get('user_id'):
         return redirect('login')
 
-    user =Register.objects.get(id=request.session['user_id'])
-    room = get_object_or_404(Room,id=id)
+    user = Register.objects.get(id=request.session['user_id'])
+    room = get_object_or_404(Room, id=id)
 
-    if request.method =="POST":
+    if request.method == "POST":
 
-        check_in = datetime.strptime(request.POST['check_in'],"%Y-%m-%d").date()
-        check_out = datetime.strptime(request.POST['check_out'],"%Y-%m-%d").date()
-        # payment_method = request.POST['payment_method']
+        check_in_value = request.POST.get('check_in')
+        check_out_value = request.POST.get('check_out')
+        payment_method = request.POST.get('payment_method')
 
-    # ❗ Validate dates
-        if check_out <=check_in:
-            return redirect(request,"room_details",{
-                "room": room,
-                "user": user,
-                "error": "Check-out must be after check=in"
-            })
-    
-    # ❗ Overlap check (SAME LOGIC AS AVAILABILITY)
+        if not check_in_value or not check_out_value or not payment_method:
+            return redirect("room_details", id=id)
+
+        check_in = datetime.strptime(check_in_value, "%Y-%m-%d").date()
+        check_out = datetime.strptime(check_out_value, "%Y-%m-%d").date()
+
+        # ✅ Validate dates
+        if check_out <= check_in:
+            return redirect("room_details", id=id)
+
+        # ✅ Overlap check
         overlap = Booking_room.objects.filter(
-            room = room,
-            check_in__lt = check_out,
+            room=room,
+            check_in__lt=check_out,
             check_out__gt=check_in,
-            payment_status = "SUCCESS"
+            payment_status="SUCCESS"
         ).exists()
 
         if overlap:
-            return redirect("room_details",{
-                "room":room,
-                "user":user,
-                "error":"Room Already booked for selected dates"
-            })
-    
-    # ✅ Calculate nights and total
+            return redirect("room_details", id=id)
+
+        # ✅ Calculate nights & total
         nights = (check_out - check_in).days
         total_amount = nights * room.room_price
 
-        # 🔵 CREATE CLIENT HERE
-        client = razorpay.Client(auth=(
-            settings.RAZORPAY_KEY_ID,
-            settings.RAZORPAY_KEY_SECRET
-        ))
+        # ====================================================
+        # 🟢 CASH PAYMENT
+        # ====================================================
+        if payment_method == "CASH":
 
-        payment = client.order.create({
-            "amount":int(total_amount*100),
-            "currency":"INR",
-            "payment_capture" :"1"
-        })
+            booking = Booking_room.objects.create(
+                user=user,
+                room=room,
+                check_in=check_in,
+                check_out=check_out,
+                nights=nights,
+                total_amount=total_amount,
+                payment_method="CASH",
+                payment_status="SUCCESS"
+            )
 
-        booking =Booking_room.objects.create(
-            user =user,
-            room = room,
-            check_in=check_in,
-            check_out=check_out,
-            nights=nights,
-            total_amount=total_amount,
-            payment_method="Card",
-            payment_id=payment['id'],
-            payment_status="PENDING"
-        )
+            # ✅ Send mail immediately for cash
+            send_mail(
+                "Room Booking Confirmation",
+                f"""
+                Dear {booking.user.username},
 
-        return render(request,"payment.html",{
-            "booking": booking,
-            "payment": payment,
-            "razorpay_key": settings.RAZORPAY_KEY_ID,
-            "amount": int(total_amount * 100)
-        })
-    
+                Your booking is confirmed.
+
+                Room: {booking.room.room_type}
+                Check-in: {booking.check_in}
+                Check-out: {booking.check_out}
+                Nights: {booking.nights}
+                Total Amount: ₹{booking.total_amount}
+
+                Thank you!
+                """,
+                "your_email@gmail.com",
+                [booking.user.email],
+                fail_silently=False,
+            )
+
+            return redirect("payment_success_page", booking_id=booking.id)
+
+        # ====================================================
+        # 🔵 RAZORPAY PAYMENT
+        # ====================================================
+        elif payment_method == "RAZORPAY":
+
+            client = razorpay.Client(auth=(
+                settings.RAZORPAY_KEY_ID,
+                settings.RAZORPAY_KEY_SECRET
+            ))
+
+            payment = client.order.create({
+                "amount": int(total_amount * 100),
+                "currency": "INR",
+                "payment_capture": "1"
+            })
+
+            booking = Booking_room.objects.create(
+                user=user,
+                room=room,
+                check_in=check_in,
+                check_out=check_out,
+                nights=nights,
+                total_amount=total_amount,
+                payment_method="RAZORPAY",
+                payment_id=payment['id'],
+                payment_status="PENDING"
+            )
+
+            return render(request, "payment.html", {
+                "booking": booking,
+                "payment": payment,
+                "razorpay_key": settings.RAZORPAY_KEY_ID,
+                "amount": int(total_amount * 100)
+            })
+
     return redirect("room_details", id=id)
 
 def payment_success(request):
@@ -271,4 +326,6 @@ def payment_success(request):
 
     return render(request, "success.html", {"booking": booking})
 
-     
+def payment_success_page(request, booking_id):
+    booking = Booking_room.objects.get(id=booking_id)
+    return render(request, "success.html", {"booking": booking})  

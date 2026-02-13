@@ -18,6 +18,7 @@ urlpatterns = [
     path('banquet',views.banquet,name='banquet'),
     path('meeting',views.meeting,name='meeting'),
     path('initiate-booking/<int:id>/', views.initiate_booking, name='initiate_booking'),
-    path('booking-sucess/',views.booking_sucess,name='booking_success')
-
+    path('booking-sucess/',views.booking_sucess,name='booking_success'),
+    path("success/<int:booking_id>/", views.payment_success_page, name="payment_success_page"),
+    path("payment-success/", views.payment_success, name="payment_success")
 ]
