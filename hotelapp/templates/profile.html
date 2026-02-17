@@ -52,6 +52,13 @@
                     {% if bookings %}
                     <div class="table-responsive">
                         <table class="booking-table">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-success">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                        {% endif %}
                             <thead>
                                 <tr>
                                     <th>Room</th>

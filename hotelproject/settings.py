@@ -138,7 +138,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'tiwaripragati1104@gmail.com'
-EMAIL_HOST_PASSWORD = 'Pr@g@ti1102'
+EMAIL_HOST_PASSWORD = 'ntyy snfl ozob krhr'
+
 
 RAZORPAY_KEY_ID = "rzp_test_uqhoYnBzHjbvGF"
 RAZORPAY_KEY_SECRET = "jEhBs6Qp9hMeGfq5FyU45cVi"

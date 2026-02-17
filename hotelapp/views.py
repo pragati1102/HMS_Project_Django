@@ -8,6 +8,7 @@ from datetime import datetime
 from django.core.mail import send_mail
 import razorpay
 from django.conf import settings
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -38,8 +39,8 @@ def about(request):
 def room_details(request, id):
     room = get_object_or_404(Room, id=id)
 
-    check_in = request.GET.get('check_in')
-    check_out = request.GET.get('check_out')
+    check_in = request.session.get('check_in')
+    check_out = request.session.get('check_out')
 
     nights = 0
     total_amount = 0
@@ -148,6 +149,9 @@ def check_availability(request):
         persons = int(request.POST.get("persons"))
         required_rooms = int(request.POST.get("rooms"))
 
+        request.session['check_in'] = check_in
+        request.session['check_out'] = check_out
+
         all_rooms = Room.objects.filter(
             room_capacity__gte=persons,
             room_available=True
@@ -165,8 +169,8 @@ def check_availability(request):
 
         available_rooms = available_rooms[:required_rooms]
 
-    return render(request, 'availability.html', {'rooms': available_rooms,'check_in': check_in,
-        'check_out': check_out
+    return render(request, 'availability.html', {'rooms': available_rooms,'check_in': request.session.get('check_in'),
+        'check_out': request.session.get('check_out')
         })
 
 def banquet(request):
@@ -323,8 +327,8 @@ def payment_success(request):
         [booking.user.email],
         fail_silently=False,
     )
-
-    return render(request, "success.html", {"booking": booking})
+    messages.success(request, "Payment Successful! Your booking is confirmed.")
+    return redirect("profile")
 
 def payment_success_page(request, booking_id):
     booking = Booking_room.objects.get(id=booking_id)

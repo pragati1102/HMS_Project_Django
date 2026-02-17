@@ -109,3 +109,58 @@
     font-size: 36px;
     color: #dfa974; /* Use primary color */
 }
+
+
+/* ===== Roomify Logo ===== */
+.roomify-logo {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #222;
+    text-decoration: none;
+    font-family: 'Lora', serif;
+}
+
+.roomify-logo span {
+    color: #dfa974;   /* luxury gold color */
+}
+
+.roomify-logo:hover {
+    color: #dfa974;
+    text-decoration: none;
+}
+
+/* ===== Navbar Improvements ===== */
+.header-section {
+    background: #ffffff;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.mainmenu ul li a {
+    font-weight: 600;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.mainmenu ul li a:hover {
+    color: #dfa974;
+}
+
+.mainmenu ul li.active a {
+    color: #dfa974;
+}
+
+/* Dropdown Style */
+.mainmenu ul li .dropdown {
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.mainmenu ul li .dropdown li a:hover {
+    background: #dfa974;
+    color: #fff;
+    border-radius: 5px;
+}
