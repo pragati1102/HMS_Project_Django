@@ -36,7 +36,11 @@
                                     <div class="rating">
                                         {{room.room_rating}}
                                     </div>
-                                    <a href="{}" data-bs-toggle="modal" data-bs-target="#bookingModal{{ room.id }}"> Booking Now</a>
+                                    {% if request.session.user_id %}
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#bookingModal{{ room.id }}" onclick="openBokingModal()"> Booking Now</a>
+                                    {% else %}
+                                        <a href="{% url 'login' %}" class="btn btn-danger">Login to Book</a>
+                                    {% endif %}
                                 </div>
                             </div>
                             <h2>{{room.room_price}}<span>/Pernight</span></h2>
@@ -81,7 +85,7 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title">Book {{ room.room_type }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">X</button>
                 </div>
 
                 <div class="modal-body">
@@ -132,13 +136,29 @@
 </div>
 {% endblock %}
 </body>
+<script>
+function openBookingModal() {
+
+    let checkin = document.getElementById("check_in");
+    let checkout = document.getElementById("check_out");
+
+    if (!checkin || !checkout || !checkin.value || !checkout.value) {
+        alert("Please Select Check-in and Check-Out Dates First");
+        return;
+    }
+
+    var myModal = new bootstrap.Modal(
+        document.getElementById('bookingModal{{ room.id }}')
+    );
+    myModal.show();
+}
+</script>
 {% if show_modal %}
 <script>
     var bookingModal = new bootstrap.Modal(
         document.getElementById('bookingModal{{ room.id }}')
     );
-    bookingModal.show();
+    bookingModal.show()
 </script>
 {% endif %}
-
 </html>

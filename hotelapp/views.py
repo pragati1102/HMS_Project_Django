@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from datetime import datetime
+from datetime import datetime,date
 from django.core.mail import send_mail
 import razorpay
 from django.conf import settings
@@ -151,9 +151,26 @@ def check_availability(request):
 
         request.session['check_in'] = check_in
         request.session['check_out'] = check_out
+        
+        try:
+            check_in_date = datetime.strptime(check_in, "%Y-%m-%d").date()
+            check_out_date = datetime.strptime(check_out, "%Y-%m-%d").date()
+        except:
+            error = "Invalid date format."
+            return render(request, "availability.html", {"error": error})
+        
+        today = date.today()
+
+        if check_in_date < today:
+            error = "Check-in date cannot be in the past."
+            return render(request, "availability.html", {"error": error})
+
+        # ❌ Invalid range
+        if check_out_date <= check_in_date:
+            error = "Check-out must be after check-in date."
+            return render(request, "availability.html", {"error": error})
 
         all_rooms = Room.objects.filter(
-            room_capacity__gte=persons,
             room_available=True
         )
 
@@ -169,7 +186,10 @@ def check_availability(request):
 
         available_rooms = available_rooms[:required_rooms]
 
-    return render(request, 'availability.html', {'rooms': available_rooms,'check_in': request.session.get('check_in'),
+    return render(request, 'availability.html', {
+        'rooms': available_rooms,
+        # 'error': error,
+        'check_in': request.session.get('check_in'),
         'check_out': request.session.get('check_out')
         })
 
@@ -194,6 +214,7 @@ def initiate_booking(request, id):
         check_in_value = request.POST.get('check_in')
         check_out_value = request.POST.get('check_out')
         payment_method = request.POST.get('payment_method')
+
 
         if not check_in_value or not check_out_value or not payment_method:
             return redirect("room_details", id=id)

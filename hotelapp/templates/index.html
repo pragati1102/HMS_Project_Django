@@ -17,8 +17,13 @@
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
+                        {% if error %}
+                            <div class="alert alert-danger text-center">
+                                {{ error }}
+                            </div>
+                        {% endif %}
                         <h3>Booking Your Hotel</h3>
-                        <form method="POST" action="{% url 'check_availability' %}">
+                        <form method="POST" action="{% url 'check_availability' %}" id= "check_availability">
                             {% csrf_token %}
                             <div class="check-date" >
                                 <label for="date-in">Check In:</label>
@@ -137,7 +142,7 @@
                         <div class="hp-room-item set-bg" data-setbg="{{room.room_image.url}}">
                             <div class="hr-text">
                                 <h3>{{room.room_type}}</h3>
-                                <a href="{% url 'room_details' room.id %}" class="primary-btn">More Details</a>
+                                {% comment %} <a href="{% url 'room_details' room.id %}" class="primary-btn">More Details</a> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -255,5 +260,12 @@
     </section>
     <!-- Blog Section End -->
 {% endblock %}
+
+{% if error %}
+<script>
+    var myModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+    myModal.show();
+</script>
+{% endif %}
 </body>
 </html>
