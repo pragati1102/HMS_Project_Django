@@ -1,0 +1,71 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <div class="admin-stat-card">
+            <div class="admin-stat-title">Users</div>
+            <div class="admin-stat-value">{{ stats.users }}</div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="admin-stat-card">
+            <div class="admin-stat-title">Rooms</div>
+            <div class="admin-stat-value">{{ stats.rooms }}</div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="admin-stat-card">
+            <div class="admin-stat-title">Bookings</div>
+            <div class="admin-stat-value">{{ stats.bookings }}</div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="admin-stat-card">
+            <div class="admin-stat-title">Success / Pending</div>
+            <div class="admin-stat-value">{{ stats.bookings_success }} / {{ stats.bookings_pending }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-card mt-2">
+    <div class="admin-card-header">
+        Latest bookings
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Room</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in latest_bookings %}
+                    <tr>
+                        <td>{{ b.id }}</td>
+                        <td>{{ b.user }}</td>
+                        <td>{{ b.room }}</td>
+                        <td>{{ b.check_in }}</td>
+                        <td>{{ b.check_out }}</td>
+                        <td>{{ b.total_amount }}</td>
+                        <td>
+                            <span class="badge badge-{% if b.payment_status == 'SUCCESS' %}success{% else %}warning{% endif %}">
+                                {{ b.payment_status }}
+                            </span>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="7" class="text-center text-muted p-4">No bookings found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+

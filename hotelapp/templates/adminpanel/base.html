@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} | Roomify Admin</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/modern.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/admin_panel.css' %}" type="text/css">
+</head>
+<body class="admin-body">
+    <header class="admin-topbar">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between py-3">
+                <a href="{% url 'admin_panel_dashboard' %}" class="admin-brand d-flex align-items-center">
+                    <img src="{% static 'img/Logo.png' %}" alt="Roomify" class="admin-logo">
+                    <span class="admin-brand-text">Admin Panel</span>
+                </a>
+                <div class="admin-top-actions">
+                    <span class="admin-hello">Hi, {{ request.session.admin_panel_username|default:"admin" }}</span>
+                    <a class="btn btn-sm btn-outline-light ml-2" href="{% url 'admin_panel_logout' %}">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <div class="container-fluid">
+            <div class="row">
+                <aside class="col-lg-2 admin-sidebar">
+                    <a class="admin-nav-item {% if request.resolver_match.url_name == 'admin_panel_dashboard' %}active{% endif %}" href="{% url 'admin_panel_dashboard' %}">
+                        <i class="fa fa-dashboard"></i> Dashboard
+                    </a>
+                    <div class="admin-nav-section">Models</div>
+                    {% for m in admin_models %}
+                        <a class="admin-nav-item {% if model_name == m.name %}active{% endif %}" href="{% url 'admin_panel_model_list' m.name %}">
+                            <i class="fa fa-database"></i> {{ m.label }}
+                        </a>
+                    {% endfor %}
+                </aside>
+
+                <section class="col-lg-10 py-4 admin-content">
+                    {% if messages %}
+                        <div class="mb-3">
+                            {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} mb-2" role="alert">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h3 class="m-0">{{ page_title }}</h3>
+                        {% block header_actions %}{% endblock %}
+                    </div>
+
+                    {% block content %}{% endblock %}
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

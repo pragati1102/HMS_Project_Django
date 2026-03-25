@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Banner -->
+<div style="
+    background: url('{% static 'img/banquet-banner.jpg' %}') center/cover no-repeat;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+">
+    <h1 style="
+        padding: 15px 30px;
+        border-radius: 8px;
+    ">
+        Our Banquet & Events
+    </h1>
+</div>
+
+<!-- Blog Content -->
+<div style="padding: 60px 0; background:#f9f9f9;">
+    <div class="container">
+
+        <!-- Blog Card -->
+        <div style="
+            display: flex;
+            gap: 30px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        ">
+
+            <img src="{% static 'img/blog/Banquet.jpg' %}"
+                 style="width:320px; height:220px; object-fit:cover; border-radius:10px;">
+
+            <div>
+                <h3>Luxury Banquet Hall</h3>
+                <p style="color:#777;">
+                    Host weddings, receptions, corporate events, and celebrations
+                    in our elegantly designed banquet hall with premium décor.
+                </p>
+
+                <ul style="padding-left:18px; color:#555;">
+                    <li>Capacity up to 300 guests</li>
+                    <li>Modern lighting & sound system</li>
+                    <li>Custom décor arrangements</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Blog Card -->
+        <div style="
+            display: flex;
+            gap: 30px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        ">
+
+            <img src="{% static 'img/blog/Banquet2.jpg' %}"
+                 style="width:320px; height:220px; object-fit:cover; border-radius:10px;">
+
+            <div>
+                <h3>Perfect for Weddings & Celebrations</h3>
+                <p style="color:#777;">
+                    Make your special moments unforgettable with our luxury
+                    banquet services, professional staff, and curated menus.
+                </p>
+
+                <ul style="padding-left:18px; color:#555;">
+                    <li>Wedding & engagement functions</li>
+                    <li>Birthday & anniversary parties</li>
+                    <li>Theme-based decorations</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

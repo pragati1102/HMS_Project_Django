@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-e&0w!*!asy12evo)3u&ryuf7dl^j7n#!qu56cv=hqx41-)-akp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Keep dev server working when accessed via localhost/IP.
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]", "0.0.0.0"]
 
 
 # Application definition
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'hotelproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR/'templates'],
+        'DIRS': [BASE_DIR/"templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,21 +117,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'hotelapp' / 'static',
-]
+# Where `collectstatic` will gather files (useful for deployment).
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# App-level static files (e.g. `hotelapp/static/...`) are discovered automatically.
 
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media'
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -144,3 +143,10 @@ EMAIL_HOST_PASSWORD = 'ntyy snfl ozob krhr'
 RAZORPAY_KEY_ID = "rzp_test_uqhoYnBzHjbvGF"
 RAZORPAY_KEY_SECRET = "jEhBs6Qp9hMeGfq5FyU45cVi"
 
+
+# -------------------------------------------------------------------
+# Custom themed admin panel credentials
+# -------------------------------------------------------------------
+# NOTE: This is intentionally hard-coded to match project requirements.
+ADMIN_PANEL_USERNAME = "admin"
+ADMIN_PANEL_PASSWORD = "admin123"

@@ -1,0 +1,71 @@
+{% extends "adminpanel/base.html" %}
+{% load adminpanel_extras %}
+
+{% block header_actions %}
+<a class="btn btn-sm btn-primary" href="{% url 'admin_panel_model_add' model_name %}">
+    <i class="fa fa-plus"></i> Add
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header d-flex align-items-center justify-content-between">
+        <span>{{ model_label }}</span>
+        <small class="text-muted">Showing latest 500 rows</small>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    {% for f in field_infos %}
+                        <th>{{ f.label }}</th>
+                    {% endfor %}
+                    <th style="width: 140px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in objects %}
+                    <tr>
+                        {% for f in field_infos %}
+                            {% with value=obj|attr:f.name %}
+                                <td>
+                                    {% if f.is_image %}
+                                        {% if value %}
+                                            <img src="{{ value.url }}" class="admin-thumb" alt="">
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if value is True %}
+                                            Yes
+                                        {% elif value is False %}
+                                            No
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            {% endwith %}
+                        {% endfor %}
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary" href="{% url 'admin_panel_model_edit' model_name obj.pk %}">
+                                Edit
+                            </a>
+                            <a class="btn btn-sm btn-outline-danger" href="{% url 'admin_panel_model_delete' model_name obj.pk %}">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="{{ field_infos|length|add:1 }}" class="text-center text-muted p-4">
+                            No data found.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+

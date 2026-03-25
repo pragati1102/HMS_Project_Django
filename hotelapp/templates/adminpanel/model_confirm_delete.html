@@ -1,0 +1,28 @@
+{% extends "adminpanel/base.html" %}
+
+{% block header_actions %}
+<a class="btn btn-sm btn-outline-secondary" href="{{ cancel_url }}">
+    <i class="fa fa-times"></i> Cancel
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        Confirm delete
+    </div>
+    <div class="admin-card-body">
+        <p class="mb-3">Delete this item?</p>
+        <div class="alert alert-warning">
+            <strong>{{ object }}</strong>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">
+                <i class="fa fa-trash"></i> Delete
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
